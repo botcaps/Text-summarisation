@@ -5,13 +5,29 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
 
+# Function to read requirements from a file and return as a list
+def get_requirements(file_path: str) -> list[str]:
+    """
+    This function will return the list of requirements
+    """
+    requirements = []
+    with open(file_path) as file_obj:
+        requirements = file_obj.readlines()
+        requirements = [req.replace("\n", "") for req in requirements]
+
+        # Remove the editable install from the list of requirements
+        if "-e ." in requirements:
+            requirements.remove("-e .")
+    
+    return requirements
+
 # Define the version of the package
 __version__ = "0.0.0"
 
 # Basic metadata for the package
 REPO_NAME = "Text-summarisation"            # GitHub repository name
 AUTHOR_USER_NAME = "botcaps"               # Author's GitHub username
-SRC_REPO = "text-summariszer"             # Source code repository name (usually same as project)
+SRC_REPO = "text_summarizer"             # Source code repository name (usually same as project)
 AUTHOR_EMAIL = "abhishek.7979883@gmail.com" # Contact email for project
 
 # Call the setuptools.setup function to configure the package
@@ -29,4 +45,5 @@ setuptools.setup(
     },
     package_dir={"": "src"},               # Tell setuptools where to find the packages (in the 'src' folder)
     packages=setuptools.find_packages(where="src"),  # Automatically find all packages inside 'src' directory
+    install_requires=get_requirements("requirements.txt") # Specify the dependencies for the project
 )
